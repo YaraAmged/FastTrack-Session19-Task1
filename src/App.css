@@ -1,0 +1,13 @@
+img {
+  width: 100px;
+}
+body {
+  padding: 20px;
+  padding-top: 80px;
+}
+.MuiButton-root{
+  text-transform: none !important;
+}
+.DateRangePicker{
+  position: absolute !important;
+}
