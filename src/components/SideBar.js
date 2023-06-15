@@ -33,6 +33,7 @@ import moment from "moment/moment";
 import * as React from "react";
 import logo from "../images/download.png";
 import NestedList from "./NestedList";
+import UserTable from "./UserTable";
 
 const drawerWidth = 240;
 
@@ -82,7 +83,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   flexDirection: "column",
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleToggleDrawer = () => {
@@ -110,9 +111,9 @@ export default function PersistentDrawerLeft() {
               >
                 <Stack direction={"row"}>
                   {open ? (
-                    <KeyboardArrowLeft size="sm" />
+                    <KeyboardArrowLeft size="xs" />
                   ) : (
-                    <KeyboardArrowRight size="sm" />
+                    <KeyboardArrowRight size="xs" />
                   )}{" "}
                   <MenuIcon />
                 </Stack>
@@ -233,6 +234,7 @@ export default function PersistentDrawerLeft() {
         </List>
       </Drawer>
       <Main open={open}>
+        {props.children}
         <DrawerHeader />
       </Main>
     </Box>

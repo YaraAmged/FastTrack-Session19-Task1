@@ -6,8 +6,9 @@ import UserTable from "./components/UserTable";
 export default function UserManagementApp() {
   return (
     <>
-      <UserTable />
-      <SideBar />
+      <SideBar>
+        <UserTable />
+      </SideBar>
     </>
   );
 }

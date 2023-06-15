@@ -153,12 +153,12 @@ const columns = [
   {
     field: "userName",
     headerName: "User Name",
-    width: 300,
+    width: 200,
   },
   {
     field: "emailAddress",
     headerName: "Email Address",
-    width: 300,
+    width: 200,
   },
   {
     field: "group",

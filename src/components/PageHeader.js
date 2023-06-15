@@ -6,9 +6,11 @@ export default function PageHeader({ title, action }) {
       direction={"row"}
       justifyContent={"space-between"}
       alignItems={"center"}
-      sx={{ py: "10px" }}
+      sx={{ py: "20px" }}
     >
-      <Typography>{title}</Typography>
+      <Typography sx={{ fontWeight: "bold", fontSize: "25px" }}>
+        {title}
+      </Typography>
       {action}
     </Stack>
   );
