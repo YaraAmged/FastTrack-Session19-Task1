@@ -34,16 +34,17 @@ import AddUserBtn from "./AddUserBtn";
 import PageHeader from "./PageHeader";
 import UserDialog from "./UserDialog";
 
-const grayColor = "rgba(0,0,0,0.1)";
 const StyledIconButton = styled(IconButton)(() => ({
-  background: grayColor,
+  background: "#e7e9ef",
   borderRadius: "5px",
+  color: "#51576d",
 }));
 const StyledButton = styled(Button)(() => ({
   borderRadius: "5px",
   "&:hover, &": {
-    background: grayColor,
-    color: "black",
+    background: "#e7e9ef",
+    color: "#51576d",
+    height: "40px",
   },
 }));
 
@@ -51,7 +52,13 @@ function QuickSearchToolbar({ filters, setFilters }) {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Grid container direction={"row"} spacing={2} sx={{ p: 1 }} columns={16}>
+    <Grid
+      container
+      direction={"row"}
+      spacing={2}
+      sx={{ pl: "20px", pb: "20px" }}
+      columns={16}
+    >
       <Grid item xs={4}>
         <TextField
           value={filters.name}
@@ -60,9 +67,12 @@ function QuickSearchToolbar({ filters, setFilters }) {
           size="small"
           fullWidth
           InputProps={{
+            sx: {
+              color: "#51576d",
+            },
             startAdornment: (
               <InputAdornment position="start">
-                <Search />
+                <Search sx={{ color: "#51576d" }} />
               </InputAdornment>
             ),
           }}
@@ -115,7 +125,7 @@ function QuickSearchToolbar({ filters, setFilters }) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <DateRange />
+                <DateRange sx={{ color: "#8893aa" }} />
               </InputAdornment>
             ),
           }}
@@ -130,7 +140,7 @@ function QuickSearchToolbar({ filters, setFilters }) {
         />{" "}
       </Grid>
       <Grid item xs={2} alignSelf={"center"}>
-        <Typography color={"primary"}>All Filters</Typography>
+        <Typography color={"#1b81fb"}>All Filters</Typography>
       </Grid>
     </Grid>
   );
@@ -249,13 +259,17 @@ export default function UserTable() {
 
       <Box
         sx={{
-          padding: "20px",
+          paddingTop: "20px",
           width: "100%",
           border: "solid 1px #e7e9ef ",
           borderRadius: "16px",
         }}
       >
-        <QuickSearchToolbar filters={filters} setFilters={setFilters} />
+        <QuickSearchToolbar
+          filters={filters}
+          setFilters={setFilters}
+          sx={{ padding: "20px" }}
+        />
 
         {selectedRows.length > 0 && (
           <Stack
@@ -264,8 +278,16 @@ export default function UserTable() {
             justifyContent={"space-between"}
             p={1}
           >
-            <Stack direction={"row"} alignItems={"center"} gap={2}>
-              <Typography> {selectedRows.length} selected</Typography>
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              gap={2}
+              sx={{ paddingLeft: "20px" }}
+            >
+              <Typography sx={{ color: "#51576d" }}>
+                {" "}
+                {selectedRows.length} selected
+              </Typography>
               <Divider orientation="vertical" sx={{ height: "25px" }} />
               {selectedRows.length === 1 && (
                 <>
@@ -286,14 +308,18 @@ export default function UserTable() {
               <StyledIconButton>
                 <Lock />
               </StyledIconButton>
-              <StyledButton variant="contained">Assign To Profile</StyledButton>
-              <StyledButton variant="contained">Assign To Group</StyledButton>
+              <StyledButton>Assign To Profile</StyledButton>
+              <StyledButton>Assign To Group</StyledButton>
               <StyledIconButton>
                 <MoreVert />
               </StyledIconButton>
               <Button
                 variant="text"
-                sx={{ textTransform: "none", textDecoration: "underline" }}
+                sx={{
+                  textTransform: "none",
+                  textDecoration: "underline",
+                  color: "#51576d",
+                }}
                 onClick={() => setSelectedRows([])}
               >
                 Unselect all
@@ -311,6 +337,8 @@ export default function UserTable() {
           }}
           rows={filteredRows}
           sx={{
+            color: "#8893aa",
+            minHeight: "300px",
             border: "none",
             "& .MuiDataGrid-columnHeaders": {
               background: "#F9FAFC",

@@ -33,7 +33,6 @@ import moment from "moment/moment";
 import * as React from "react";
 import logo from "../images/download.png";
 import NestedList from "./NestedList";
-import UserTable from "./UserTable";
 
 const drawerWidth = 240;
 
@@ -94,7 +93,7 @@ export default function PersistentDrawerLeft(props) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ height: 70, bgcolor: "white", color: "#51576d" }}>
+        <Toolbar sx={{ height: 70, background: "white", color: "#51576d" }}>
           <Stack
             direction={"row"}
             gap={2}
@@ -124,11 +123,19 @@ export default function PersistentDrawerLeft(props) {
             </Stack>
             <Stack direction={"row"} gap={1} alignItems={"center"}>
               <IconButton>
-                <HelpOutline />
+                <HelpOutline
+                  sx={{
+                    color: "#51576d",
+                  }}
+                />
               </IconButton>
               <IconButton>
                 <Badge badgeContent={"9+"} color="error">
-                  <Notifications />
+                  <Notifications
+                    sx={{
+                      color: "#51576d",
+                    }}
+                  />
                 </Badge>
               </IconButton>
               <Divider orientation="vertical" sx={{ mx: 1 }} />

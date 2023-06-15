@@ -5,9 +5,9 @@ body {
   padding: 20px;
   padding-top: 80px;
 }
-.MuiButton-root{
+.MuiButton-root {
   text-transform: none !important;
 }
-.DateRangePicker{
+.DateRangePicker {
   position: absolute !important;
 }
