@@ -108,14 +108,12 @@ export default function PersistentDrawerLeft(props) {
                 edge="start"
                 sx={{ mr: 2 }}
               >
-                <Stack direction={"row"}>
-                  {open ? (
-                    <KeyboardArrowLeft size="xs" />
-                  ) : (
-                    <KeyboardArrowRight size="xs" />
-                  )}{" "}
-                  <MenuIcon />
-                </Stack>
+                {open ? (
+                  <KeyboardArrowLeft size="xs" />
+                ) : (
+                  <KeyboardArrowRight size="xs" />
+                )}
+                <MenuIcon sx={{ ml: "-5px" }} />
               </IconButton>
               <Typography noWrap component="div">
                 Good Morning! {moment().format("ddd MMM DD, YYYY LT")}
@@ -123,19 +121,23 @@ export default function PersistentDrawerLeft(props) {
             </Stack>
             <Stack direction={"row"} gap={1} alignItems={"center"}>
               <IconButton>
-                <HelpOutline
-                  sx={{
-                    color: "#51576d",
-                  }}
-                />
+                <HelpOutline sx={{ color: "#51576d" }} />
               </IconButton>
               <IconButton>
-                <Badge badgeContent={"9+"} color="error">
-                  <Notifications
-                    sx={{
-                      color: "#51576d",
-                    }}
-                  />
+                <Badge
+                  badgeContent={"9+"}
+                  color="error"
+                  componentsProps={{
+                    badge: {
+                      sx: {
+                        borderRadius: "3px",
+                        transform: "translate(40%,-20%)",
+                        padding: 0,
+                      },
+                    },
+                  }}
+                >
+                  <Notifications sx={{ color: "#51576d" }} />
                 </Badge>
               </IconButton>
               <Divider orientation="vertical" sx={{ mx: 1 }} />
@@ -173,13 +175,10 @@ export default function PersistentDrawerLeft(props) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <Box textAlign={"center"} px={1}>
           <img src={logo} alt="logo"></img>
           <TextField
             sx={{
-              "& ::placeholder": {
-                color: "#9ea7ba",
-              },
               background: "white",
               borderColor: "none",
               borderRadius: "20px 20px",
@@ -195,7 +194,7 @@ export default function PersistentDrawerLeft(props) {
               ),
             }}
           />
-        </DrawerHeader>
+        </Box>
         <List>
           <ListItem disablePadding sx={{ color: "#828796", paddingTop: "5px" }}>
             <ListItemButton>
@@ -225,8 +224,9 @@ export default function PersistentDrawerLeft(props) {
               title: "User Management",
               items: ["Users", "Profiles", "Groups"],
             },
-          ].map((entry) => (
+          ].map((entry, i) => (
             <NestedList
+              key={i}
               title={entry.title}
               items={entry.items}
               selected={"Users"}

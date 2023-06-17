@@ -97,7 +97,7 @@ function QuickSearchToolbar({ filters, setFilters }) {
             renderValue={(s) => `${s},`}
           >
             {["Active", "Inactive"].map((statusItem) => (
-              <MenuItem value={statusItem}>
+              <MenuItem value={statusItem} key={statusItem}>
                 <Checkbox
                   size="small"
                   checked={filters.status.includes(statusItem)}
@@ -145,64 +145,6 @@ function QuickSearchToolbar({ filters, setFilters }) {
     </Grid>
   );
 }
-const columns = [
-  {
-    field: "name",
-    headerName: "Name",
-    width: 300,
-    renderCell: (params) => {
-      const nameParts = params.row.name.split(" ");
-      return (
-        <Stack direction={"row"} gap={2} alignItems={"center"}>
-          <Avatar>{nameParts.map((namePart) => namePart[0]).join("")}</Avatar>
-          <Typography>{params.row.name}</Typography>
-        </Stack>
-      );
-    },
-  },
-  {
-    field: "userName",
-    headerName: "User Name",
-    width: 200,
-  },
-  {
-    field: "emailAddress",
-    headerName: "Email Address",
-    width: 200,
-  },
-  {
-    field: "group",
-    headerName: "Group",
-    width: 120,
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <Select
-          value={params.row.status}
-          fullWidth
-          variant="standard"
-          disableUnderline
-        >
-          <MenuItem value="Active">Active</MenuItem>
-          <MenuItem value="inactive">Inactive</MenuItem>
-        </Select>
-      );
-    },
-  },
-  {
-    field: "createdOn",
-    headerName: "Created On",
-    sortable: false,
-    width: 120,
-    valueGetter: (params) => {
-      return moment(params.row.createdOn).format("MMM DD, YYYY");
-    },
-  },
-];
 
 export default function UserTable() {
   const [rows, setRows] = React.useState([]);
@@ -216,6 +158,75 @@ export default function UserTable() {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      width: 300,
+      renderCell: (params) => {
+        const nameParts = params.row.name.split(" ");
+        return (
+          <Stack direction={"row"} gap={2} alignItems={"center"}>
+            <Avatar>{nameParts.map((namePart) => namePart[0]).join("")}</Avatar>
+            <Typography>{params.row.name}</Typography>
+          </Stack>
+        );
+      },
+    },
+    {
+      field: "userName",
+      headerName: "User Name",
+      width: 200,
+    },
+    {
+      field: "emailAddress",
+      headerName: "Email Address",
+      width: 200,
+    },
+    {
+      field: "group",
+      headerName: "Group",
+      width: 120,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <Select
+            onChange={(e) =>
+              setRows((rows) => {
+                const newRows = [...rows];
+                const index = newRows.findIndex(
+                  (row) => row.id === params.row.id
+                );
+                newRows[index].status = e.target.value;
+                return newRows;
+              })
+            }
+            value={params.row.status}
+            fullWidth
+            variant="standard"
+            disableUnderline
+          >
+            <MenuItem value="Active">Active</MenuItem>
+            <MenuItem value="Inactive">Inactive</MenuItem>
+          </Select>
+        );
+      },
+    },
+    {
+      field: "createdOn",
+      headerName: "Created On",
+      sortable: false,
+      width: 120,
+      valueGetter: (params) => {
+        return moment(params.row.createdOn).format("MMM DD, YYYY");
+      },
+    },
+  ];
+
   React.useEffect(() => {
     if (isLoaded) {
       localStorage.setItem("rows", JSON.stringify(rows));
@@ -285,7 +296,6 @@ export default function UserTable() {
               sx={{ paddingLeft: "20px" }}
             >
               <Typography sx={{ color: "#51576d" }}>
-                {" "}
                 {selectedRows.length} selected
               </Typography>
               <Divider orientation="vertical" sx={{ height: "25px" }} />

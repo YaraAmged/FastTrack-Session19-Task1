@@ -26,9 +26,6 @@ const StyledInputBase = styled(InputBase)(() => ({
   background: "white",
   paddingLeft: 10,
   borderRadius: "5px",
-  "& ::placeholder": {
-    color: grayColor,
-  },
 }));
 const StyledInputLabel = styled(InputLabel)(() => ({
   color: darkBlueColor,
@@ -87,11 +84,17 @@ export default function UserDialog({
             <Select
               size="small"
               value={formState.group}
-              inputProps={{ placeholder: "Choose User Group" }}
+              displayEmpty
               onChange={(e) => {
                 setFormState({ ...formState, group: e.target.value });
               }}
+              className={
+                formState.group === "" ? "placeholder-color" : undefined
+              }
             >
+              <MenuItem value="" disabled>
+                Choose User Group
+              </MenuItem>
               <MenuItem value="admin">Admin</MenuItem>
               <MenuItem value="office">Office</MenuItem>
             </Select>
@@ -99,13 +102,20 @@ export default function UserDialog({
           <Stack>
             <StyledInputLabel>Assign Profile</StyledInputLabel>
             <Select
-              placeholder="Choose Profile"
               size="small"
+              variant="outlined"
               value={formState.assignProfile}
+              displayEmpty
               onChange={(e) => {
                 setFormState({ ...formState, assignProfile: e.target.value });
               }}
+              className={
+                formState.assignProfile === "" ? "placeholder-color" : undefined
+              }
             >
+              <MenuItem value="" disabled className="placeholder-color">
+                Choose Profile
+              </MenuItem>
               <MenuItem value="1">1</MenuItem>
             </Select>
           </Stack>

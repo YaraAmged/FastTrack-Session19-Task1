@@ -4,7 +4,11 @@ import * as React from "react";
 const greenColor = "#22a565";
 
 export default function NestedList({ title, items, selected }) {
-  const [open, setOpen] = React.useState(false);
+  const isSelected = React.useMemo(
+    () => items.includes(selected),
+    [items, selected]
+  );
+  const [open, setOpen] = React.useState(isSelected);
 
   const handleClick = () => {
     setOpen(!open);
@@ -18,7 +22,7 @@ export default function NestedList({ title, items, selected }) {
       <ListItemButton
         onClick={handleClick}
         sx={
-          open
+          isSelected
             ? {
                 background: greenColor,
                 color: "white",
@@ -42,6 +46,7 @@ export default function NestedList({ title, items, selected }) {
             const isSelected = selected === item;
             return (
               <ListItemButton
+                key={item}
                 sx={{
                   pl: 4,
                   background: "#1e2642",

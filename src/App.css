@@ -11,3 +11,9 @@ body {
 .DateRangePicker {
   position: absolute !important;
 }
+
+* ::placeholder,
+.placeholder-color {
+  color: #51576d !important;
+  opacity: 1 !important;
+}
