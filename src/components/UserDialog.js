@@ -9,9 +9,11 @@ import {
   MenuItem,
   Select,
   Stack,
+  Typography,
   styled,
 } from "@mui/material";
 import * as React from "react";
+import { useForm } from "react-hook-form";
 const initialState = {
   name: "",
   userName: "",
@@ -37,15 +39,36 @@ export default function UserDialog({
   handleCloseDialog,
   handleSave,
 }) {
-  const [formState, setFormState] = React.useState(oldUser || initialState);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ defaultValues: oldUser || initialState });
   React.useEffect(() => {
-    setFormState(oldUser || initialState);
+    reset(oldUser || initialState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
   return (
-    <Dialog open={open} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
+    <Dialog
+      open={open}
+      onClose={handleCloseDialog}
+      maxWidth="xs"
+      fullWidth
+      component="form"
+      onSubmit={handleSubmit((data) => {
+        handleSave(
+          {
+            ...(oldUser || { createdOn: new Date(), status: "Active" }),
+            ...data,
+          },
+          handleCloseDialog
+        );
+      })}
+    >
       <DialogTitle sx={{ background: darkBlueColor, color: "white" }}>
-        Add New User
+        {oldUser ? "Edit User" : "Add New User"}
       </DialogTitle>
       <DialogContent sx={{ background: "#F9FAFC" }}>
         <Stack gap={2} pt={2}>
@@ -53,65 +76,71 @@ export default function UserDialog({
             <StyledInputLabel>Full Name</StyledInputLabel>
             <StyledInputBase
               placeholder="Enter full name"
-              value={formState.name}
-              onChange={(e) => {
-                setFormState({ ...formState, name: e.target.value });
-              }}
+              {...register("name", { required: true })}
             />
+
+            {errors.name ? (
+              <Typography color={"error"}>This is required</Typography>
+            ) : null}
           </Stack>
           <Stack>
             <StyledInputLabel>User Name</StyledInputLabel>
             <StyledInputBase
               placeholder="Enter username"
-              value={formState.userName}
-              onChange={(e) => {
-                setFormState({ ...formState, userName: e.target.value });
-              }}
+              {...register("userName", {
+                required: true,
+              })}
             />
+            {errors.userName ? (
+              <Typography color={"error"}>This is required</Typography>
+            ) : null}
           </Stack>
           <Stack>
             <StyledInputLabel>Email Address</StyledInputLabel>
             <StyledInputBase
               placeholder="Enter user email address"
-              value={formState.emailAddress}
-              onChange={(e) => {
-                setFormState({ ...formState, emailAddress: e.target.value });
-              }}
+              {...register("emailAddress", {
+                required: { value: true, message: "This is required" },
+                pattern: {
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                  message: "Invalid Email",
+                },
+              })}
             />
+            {errors.emailAddress ? (
+              <Typography color={"error"}>
+                {errors.emailAddress.message}
+              </Typography>
+            ) : null}
           </Stack>
           <Stack>
             <StyledInputLabel>User Group</StyledInputLabel>
             <Select
               size="small"
-              value={formState.group}
               displayEmpty
-              onChange={(e) => {
-                setFormState({ ...formState, group: e.target.value });
-              }}
-              className={
-                formState.group === "" ? "placeholder-color" : undefined
-              }
+              {...register("group", {
+                required: { value: true, message: "This is required" },
+              })}
+              defaultValue={oldUser?.group || ""}
             >
               <MenuItem value="" disabled>
                 Choose User Group
               </MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="office">Office</MenuItem>
+              <MenuItem value="Admin">Admin</MenuItem>
+              <MenuItem value="Office">Office</MenuItem>
             </Select>
+            {errors.group ? (
+              <Typography color={"error"}>{errors.group.message}</Typography>
+            ) : null}
           </Stack>
           <Stack>
             <StyledInputLabel>Assign Profile</StyledInputLabel>
             <Select
               size="small"
               variant="outlined"
-              value={formState.assignProfile}
               displayEmpty
-              onChange={(e) => {
-                setFormState({ ...formState, assignProfile: e.target.value });
-              }}
-              className={
-                formState.assignProfile === "" ? "placeholder-color" : undefined
-              }
+              {...register("assignProfile")}
+              defaultValue={oldUser?.assignProfile || ""}
             >
               <MenuItem value="" disabled className="placeholder-color">
                 Choose Profile
@@ -130,7 +159,7 @@ export default function UserDialog({
             color="inherit"
             sx={{ textDecoration: "underline", color: darkBlueColor }}
             onClick={() => {
-              setFormState(initialState);
+              reset();
             }}
           >
             Reset fields
@@ -145,20 +174,7 @@ export default function UserDialog({
               Cancel
             </Button>
 
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => {
-                handleSave(
-                  {
-                    ...(oldUser || { createdOn: new Date(), status: "Active" }),
-                    ...formState,
-                  },
-                  handleCloseDialog
-                );
-                setFormState(initialState);
-              }}
-            >
+            <Button variant="contained" color="success" type="submit">
               {oldUser ? "Save User" : "Add User"}
             </Button>
           </Stack>

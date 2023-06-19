@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import * as React from "react";
 import UserDialog from "./UserDialog";
 
-export default function AddUserBtn({ usersData, setUsersData }) {
+export default function AddUserBtn({ usersData, setUsersData, lastId }) {
   const [open, setOpen] = React.useState(false);
   const handleCloseDialog = () => {
     setOpen(false);
@@ -22,7 +22,7 @@ export default function AddUserBtn({ usersData, setUsersData }) {
         open={open}
         handleCloseDialog={handleCloseDialog}
         handleSave={(user, handleClose) => {
-          setUsersData([...usersData, { ...user, id: usersData.length }]);
+          setUsersData([...usersData, { ...user, id: lastId + 1 }]);
           handleClose();
         }}
       />

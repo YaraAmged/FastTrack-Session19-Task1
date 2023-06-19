@@ -33,6 +33,7 @@ import * as React from "react";
 import AddUserBtn from "./AddUserBtn";
 import PageHeader from "./PageHeader";
 import UserDialog from "./UserDialog";
+import { useMemo } from "react";
 
 const StyledIconButton = styled(IconButton)(() => ({
   background: "#e7e9ef",
@@ -240,21 +241,29 @@ export default function UserTable() {
     }
     setIsLoaded(true);
   }, []);
-  const filteredRows = rows.filter((row) => {
-    if (filters.startDate && new Date(row.createdOn) < filters.startDate)
-      return false;
-    if (filters.endDate && new Date(row.createdOn) > filters.endDate)
-      return false;
-    if (filters.name && !new RegExp(filters.name).test(row.name)) return false;
-    if (filters.status.length > 0 && !filters.status.includes(row.status))
-      return false;
-    if (filters.userName && filters.userName !== row.userName) return false;
-    return true;
-  });
+  const selectedIndex = useMemo(
+    () => rows.findIndex((row) => row.id === selectedRows[0]),
+    [rows, selectedRows]
+  );
+  const filteredRows = useMemo(
+    () =>
+      rows.filter((row) => {
+        if (filters.startDate && new Date(row.createdOn) < filters.startDate)
+          return false;
+        if (filters.endDate && new Date(row.createdOn) > filters.endDate)
+          return false;
+        if (filters.name && !new RegExp(filters.name).test(row.name))
+          return false;
+        if (filters.status.length > 0 && !filters.status.includes(row.status))
+          return false;
+        if (filters.userName && filters.userName !== row.userName) return false;
+        return true;
+      }),
+    [rows, filters]
+  );
   const handleEditUser = (user, handleClose) => {
     const newRows = [...rows];
-    const index = newRows.findIndex((r) => r.id === selectedRows[0]);
-    newRows.splice(index, 1, user);
+    newRows.splice(selectedIndex, 1, user);
     setRows(newRows);
     handleClose();
   };
@@ -265,7 +274,13 @@ export default function UserTable() {
     <>
       <PageHeader
         title={"User Management"}
-        action={<AddUserBtn setUsersData={setRows} usersData={rows} />}
+        action={
+          <AddUserBtn
+            setUsersData={setRows}
+            usersData={rows}
+            lastId={rows.at(-1)?.id || 0}
+          />
+        }
       />
 
       <Box
@@ -305,7 +320,7 @@ export default function UserTable() {
                     <Edit />
                   </StyledIconButton>
                   <UserDialog
-                    oldUser={rows[selectedRows[0]]}
+                    oldUser={rows[selectedIndex]}
                     open={open}
                     handleCloseDialog={() => setOpen(false)}
                     handleSave={handleEditUser}
